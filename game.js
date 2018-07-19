@@ -1,10 +1,14 @@
-let canvas, table, balls, context;
+let canvas, table, balls, context, isChoose, currentX, currentY;
 
 TCoordinatsAndStates = new Class({
    initialize: function (i,j) {
        this.centX = this.C + (i*(canvas.width/9));
        this.centY = this.C + (j*(canvas.height/9));
+       this.startX = i*(canvas.width/9);
+       this.startY = j*(canvas.height/9);
    },
+    startX:0,
+    startY:0,
     centX: 0,
     centY: 0,
     C:33,
@@ -76,6 +80,7 @@ function createCenterCoordinates() {
 }
 
 function firstSettings() {
+    isChoose = false;
     balls = [];
     canvas = document.getElementById('canvas');
     createCenterCoordinates();
@@ -113,39 +118,97 @@ function drawCanvas(ctx) {
     ctx.save();
     ctx.fillStyle = 'gray';
     ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
     for (let i = 0; i < canvas.width; i += canvas.width/9) {
-        context.beginPath();
-        context.moveTo(i, 0);
-        context.lineTo(i, canvas.height);
-        context.stroke();
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
     }
 
     for (let i = 0; i < canvas.height; i += canvas.height/9) {
-        context.beginPath();
-        context.moveTo(0, i);
-        context.lineTo(canvas.width, i);
-        context.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(canvas.width, i);
+        ctx.stroke();
     }
-    ctx.restore();
+
 }
 
 function selectElement(event) {
+    console.log("start "+event.clientX+" "+ event.clientY);
+    for (let i = 0; i<table.length;i++){
+        let f = false;
+        for (let j = 0;j<table.length;j++){
+            if ((table[i][j].startX+(canvas.width/9) >= event.clientX)
+            && (table[i][j].startX <= (canvas.width/9)+event.clientX)
+            && (table[i][j].startY+(canvas.height/9) >= event.clientY)
+                && (table[i][j].startY <= (canvas.height/9)+event.clientY)){
+                console.log("pos "+i+" "+j);
+                f = true;
+                if (!isChoose) {
+                    if (table[i][j].statSize === 2) {
+                        console.log("choose ball");
+                        currentX = i;
+                        currentY = j;
+                        isChoose = true;
+                    }
+                }else{
+                    if (i === currentX && j === currentY){
+                        console.log("reset");
+                        isChoose = false;
+                    }else if (table[i][j].statSize === 0){
+                        console.log("choose place");
+                        isChoose = false;
+                        repositionElements(currentX,currentY,i,j);
+                    } else if (table[i][j].statSize === 1){
+                        console.log("now reset");
+                        isChoose = false;
+                    } else {
+                        console.log("choose ball");
+                        currentX = i;
+                        currentY = j;
+                        isChoose = true;
+                    }
+                }
+                break;
+            }
+        }
+        if (f){
+            break;
+        }
+    }
+}
+
+function move(x1,y1,x2,y2) {
+    for (let i = 0;i<balls.length;i++){
+        if ((table[x1][y1].centX === balls[i].posX)
+          && (table[x1][y1].centY === balls[i].posY)){
+            balls.splice(i,1);
+            break;
+        }
+    }
+    drawCanvas(context);
+    for (let i = 0; i<balls.length;i++){
+        balls[i].draw(context);
+    }
+    let item = new TBall(table[x2][y2].centX, table[x2][y2].centY, 20,table[x2][y2].numCol);
+    item.draw(context);
+    balls.push(item);
+}
+
+function repositionElements(x1,y1,x2,y2) {
+    table[x1][y1].statSize = 0;
+    table[x2][y2].statSize = 2;
+    table[x2][y2].numCol = table[x1][y1].numCol;
+    move(x1,y1,x2,y2);
+}
+
+function createSmallBall(x,y) {
 
 }
 
-function move() {
-
-}
-
-function positionElements(x1,y1,x2,y2) {
-
-}
-
-function createSmallBall(x1,y1) {
-
-}
-
-function fromSmalltoBig(x1,y1) {
+function fromSmalltoBig(x,y) {
 
 }
 
