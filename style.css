@@ -1,0 +1,16 @@
+#container_with_game{
+    width: 400px;
+    height: 630px;
+}
+
+#container_with_state{
+    /*dummy*/
+}
+
+#canvas{
+    /*dummy*/
+}
+
+#restart{
+    position: relative;
+}
