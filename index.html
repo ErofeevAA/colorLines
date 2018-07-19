@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="style.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mootools/1.6.0/mootools-core.js"></script>
+    <script src="game.js"></script>
 </head>
-<body>
-
+<body onload="firstSettings()">
+<div id="container_with_game">
+    <canvas id="canvas" onclick="selectElement(event)" width="600" height="600"></canvas>
+    <input type="button" id="restart" onclick="firstSettings()" value="Restart">
+</div>
+<div id="container_with_state">
+</div>
 </body>
 </html>
