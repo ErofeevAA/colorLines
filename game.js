@@ -1,30 +1,30 @@
 let canvas, table, balls, context;
 
-TCoordinatsCenter = new Class({
+TCoordinatsAndStates = new Class({
    initialize: function (i,j) {
        this.centX = this.C + (i*(canvas.width/9));
        this.centY = this.C + (j*(canvas.height/9));
    },
     centX: 0,
     centY: 0,
-    C:33
+    C:33,
+    statSize:0,
+    numCol:0
 
 });
 
 TBall = new Class({
-    initialize: function(pX,pY,size) {
+    initialize: function(pX,pY,size,numCol) {
         this.posX = pX;
         this.posY = pY;
-        this.colBall = this.colorBall();
+        this.colBall = this.colorBall(numCol);
         this.rBall = size;
-
     },
     posX: 0,
     posY: 0,
     colBall:'rgb(0,0,0)',
     rBall: 0,
-    colorBall: function(){
-        let color = Math.floor(Math.random()*7);
+    colorBall: function(color){
         switch (color){
             case 0:
                 return 'red';
@@ -70,7 +70,7 @@ function createCenterCoordinates() {
     }
     for (let i = 0; i<table.length;i++){
         for(let j = 0; j < table.length;j++){
-            table[i][j] = new TCoordinatsCenter(i,j);
+            table[i][j] = new TCoordinatsAndStates(i,j);
         }
     }
 }
@@ -82,9 +82,30 @@ function firstSettings() {
     if (canvas.getContext){
        context = canvas.getContext('2d');
        drawCanvas(context);
-       let item = new TBall(table[8][8].centX,table[8][8].centY,20);
-       item.draw(context);
-       balls.push(item);
+       for (let i = 0;i<3;) {
+           let x = Math.floor(Math.random()*9);
+           let y = Math.floor(Math.random()*9);
+           if (table[x][y].statSize === 0) {
+               table[x][y].statSize = 2;
+               table[x][y].numCol = randomColor();
+               let item = new TBall(table[x][y].centX, table[x][y].centY, 20,table[x][y].numCol);
+               item.draw(context);
+               balls.push(item);
+               i++;
+           }
+       }
+       for (let i = 0;i<3;){
+           let x = Math.floor(Math.random()*9);
+           let y = Math.floor(Math.random()*9);
+           if (table[x][y].statSize === 0) {
+               table[x][y].statSize = 1;
+               table[x][y].numCol = randomColor();
+               let item = new TBall(table[x][y].centX, table[x][y].centY, 10,table[x][y].numCol);
+               item.draw(context);
+               balls.push(item);
+               i++;
+           }
+       }
     }
 }
 
@@ -125,5 +146,13 @@ function createSmallBall(x1,y1) {
 }
 
 function fromSmalltoBig(x1,y1) {
+
+}
+
+function randomColor() {
+    return Math.floor(Math.random()*7);
+}
+
+function randomPozition(arr) {
 
 }
