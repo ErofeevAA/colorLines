@@ -1,4 +1,4 @@
-let canvas, table, context, isChoose, currentX, currentY;
+let canvas, table, context, isChoose, currentSmall, currentX, currentY;
 
 TCoordinatsAndStates = new Class({
    initialize: function (i,j) {
@@ -64,6 +64,7 @@ function createCenterCoordinates() {
 
 function firstSettings() {
     isChoose = false;
+    currentSmall = new Array(3);
     canvas = document.getElementById('canvas');
     createCenterCoordinates();
     context = canvas.getContext('2d');
@@ -76,6 +77,7 @@ function firstSettings() {
         }
     for (let i = 0;i<3;){
         let a = randomPosition(1);
+        currentSmall[i] = a;
         let item = new TDraw();
         item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, 10,table[a[0]][a[1]].numCol);
         i++;
@@ -142,6 +144,8 @@ function selectElement(event) {
 
 function move() {
     drawCanvas(context);
+    fromSmalltoBig();
+    createSmallBall();
     for (let i = 0; i < table.length;i++){
         for (let j = 0; j < table[i].length;j++){
             if (table[i][j].statSize > 0) {
@@ -163,13 +167,16 @@ function animationMove() {
 
 }
 
-function createSmallBall(x,y) {
-    randomPosition();
-
+function createSmallBall() {
+    for (let i = 0; i<currentSmall.length;i++) {
+        currentSmall[i] = randomPosition(1);
+    }
 }
 
-function fromSmalltoBig(x,y) {
-
+function fromSmalltoBig() {
+    for (let i = 0; i<currentSmall.length;i++) {
+        table[currentSmall[i][0]][currentSmall[i][1]].statSize = 2;
+    }
 }
 
 function randomColour() {
