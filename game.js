@@ -1,25 +1,4 @@
-let canvas, table, balls, context, isChoose, currentX, currentY;
-
-TSquare = new Class({
-   initialize: function (pX,pY) {
-       this.posX = pX;
-       this.posY = pY;
-       this.size = canvas.width/9;
-   },
-    posX:0,
-    posY:0,
-    size: 0,
-    color:'gray',
-    backgroundSquare: function (ctx) {
-        // draw in this
-        return this.color;
-    },
-    drawSquare: function (ctx) {
-        ctx.fillStyle = this.backgroundSquare(ctx);
-        ctx.fillRect(this.posX, this.posY, this.size, this.size);
-        ctx.strokeRect(this.posX,this.posY,this.size,this.size);
-    }
-});
+let canvas, table, context, isChoose, currentX, currentY;
 
 TCoordinatsAndStates = new Class({
    initialize: function (i,j) {
@@ -38,34 +17,10 @@ TCoordinatsAndStates = new Class({
 
 });
 
-TBall = new Class({
-    initialize: function(pX,pY,size,numCol) {
-        this.posX = pX;
-        this.posY = pY;
-        this.colBall = this.colourBall(numCol);
-        this.rBall = size;
-    },
-    posX: 0,
-    posY: 0,
-    colBall:'rgb(0,0,0)',
-    rBall: 0,
-    colourBall: function(color){
-        switch (color){
-            case 0:
-                return 'red';
-            case 1:
-                return 'yellow';
-            case 2:
-                return 'green';
-            case 3:
-                return 'orange';
-            case 4:
-                return 'blue';
-            case 5:
-                return 'black';
-            case 6:
-                return 'pink';
-        }
+TDraw = new Class({
+    colour:['red','yellow','green','orange','blue','black','pink'],
+    colourBall: function(c){
+        return this.colour[c];
     },
    /* create later
    gradientBall: function(ctx){
@@ -78,13 +33,22 @@ TBall = new Class({
         return gradient;
     },*/
 
-    draw : function(ctx){
-        ctx.fillStyle = this.colBall;
+    drawBall : function(ctx, pX, pY, size, numCol){
+        ctx.fillStyle = this.colourBall(numCol);
         ctx.beginPath();
-        ctx.arc(this.posX, this.posY, this.rBall, 0, 2*Math.PI, false);
-
+        ctx.arc(pX,pY,size,0,2*Math.PI,false);
         ctx.closePath();
         ctx.fill();
+    },
+    backgroundSquare: function (ctx) {
+        // drawBack in this
+        return 'gray';
+    },
+    drawSquare: function (ctx,pX,pY) {
+        let s = canvas.height/9;
+        ctx.fillStyle = this.backgroundSquare(ctx);
+        ctx.fillRect(pX,pY,s,s);
+        ctx.strokeRect(pX,pY,s,s);
     }
 });
 
@@ -92,9 +56,7 @@ function createCenterCoordinates() {
     table = new Array(9);
     for (let i = 0; i < table.length; i++){
         table[i] = new Array(9);
-    }
-    for (let i = 0; i<table.length;i++){
-        for(let j = 0; j < table.length;j++){
+        for (let j = 0; j < table.length;j++){
             table[i][j] = new TCoordinatsAndStates(i,j);
         }
     }
@@ -102,36 +64,21 @@ function createCenterCoordinates() {
 
 function firstSettings() {
     isChoose = false;
-    balls = [];
     canvas = document.getElementById('canvas');
     createCenterCoordinates();
-    if (canvas.getContext){
-       context = canvas.getContext('2d');
-       drawCanvas(context);
-       for (let i = 0;i<3;) {
-           let x = Math.floor(Math.random()*9);
-           let y = Math.floor(Math.random()*9);
-           if (table[x][y].statSize === 0) {
-               table[x][y].statSize = 2;
-               table[x][y].numCol = randomColour();
-               let item = new TBall(table[x][y].centX, table[x][y].centY, 20,table[x][y].numCol);
-               item.draw(context);
-               balls.push(item);
-               i++;
-           }
-       }
-       for (let i = 0;i<3;){
-           let x = Math.floor(Math.random()*9);
-           let y = Math.floor(Math.random()*9);
-           if (table[x][y].statSize === 0) {
-               table[x][y].statSize = 1;
-               table[x][y].numCol = randomColour();
-               let item = new TBall(table[x][y].centX, table[x][y].centY, 10,table[x][y].numCol);
-               item.draw(context);
-               balls.push(item);
-               i++;
-           }
-       }
+    context = canvas.getContext('2d');
+    drawCanvas(context);
+    for (let i = 0;i<3;) {
+        let a = randomPosition(2);
+        let item = new TDraw();
+        item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, 20,table[a[0]][a[1]].numCol);
+        i++;
+        }
+    for (let i = 0;i<3;){
+        let a = randomPosition(1);
+        let item = new TDraw();
+        item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, 10,table[a[0]][a[1]].numCol);
+        i++;
     }
 }
 
@@ -142,8 +89,8 @@ function drawCanvas(ctx) {
     ctx.restore();
     for (let i = 0; i < canvas.width; i += canvas.width/9) {
         for (let j = 0; j < canvas.height; j += canvas.height/9){
-            let item = new TSquare(i,j);
-            item.drawSquare(ctx);
+            let item = new TDraw();
+            item.drawSquare(ctx,i,j);
         }
     }
 }
@@ -193,33 +140,32 @@ function selectElement(event) {
     }
 }
 
-function move(x1,y1,x2,y2) {
-    for (let i = 0;i<balls.length;i++){
-        if ((table[x1][y1].centX === balls[i].posX)
-          && (table[x1][y1].centY === balls[i].posY)){
-            balls.splice(i,1);
-            break;
+function move() {
+    drawCanvas(context);
+    for (let i = 0; i < table.length;i++){
+        for (let j = 0; j < table[i].length;j++){
+            if (table[i][j].statSize > 0) {
+                let item = new TDraw();
+                item.drawBall(context, table[i][j].centX, table[i][j].centY, table[i][j].statSize*10, table[i][j].numCol);
+            }
         }
     }
-    drawCanvas(context);
-    for (let i = 0; i<balls.length;i++){
-        balls[i].draw(context);
-    }
-    let item = new TBall(table[x2][y2].centX, table[x2][y2].centY, 20,table[x2][y2].numCol);
-    item.draw(context);
-    balls.push(item);
-
 }
 
 function repositionElements(x1,y1,x2,y2) {
     table[x1][y1].statSize = 0;
     table[x2][y2].statSize = 2;
     table[x2][y2].numCol = table[x1][y1].numCol;
-    move(x1,y1,x2,y2);
+    move();
+}
+
+function animationMove() {
+
 }
 
 function createSmallBall(x,y) {
     randomPosition();
+
 }
 
 function fromSmalltoBig(x,y) {
@@ -230,6 +176,28 @@ function randomColour() {
     return Math.floor(Math.random()*7);
 }
 
-function randomPosition() {
+function randomPosition(s) {
+    let x;
+    let y;
+    do {
+        x=Math.floor(Math.random()*9);
+    }while (!checkFullness(x));
+    for (let i = 0;i<table.length;i++){
+        y=Math.floor(Math.random()*9);
+        if (table[x][y].statSize === 0) {
+            table[x][y].statSize = s;
+            table[x][y].numCol = randomColour();
+            break;
+        }
+    }
+    return [x,y];
+}
 
+function checkFullness(x) {
+    for (let i = 0; i<table.length;i++){
+        if (table[x][i].statSize === 0){
+            return true;
+        }
+    }
+    return false;
 }
