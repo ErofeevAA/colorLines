@@ -1,4 +1,4 @@
-let canvas, table, context, isChoose, currentSmall, currentX, currentY;
+let canvas,count, table, context, isChoose, currentSmall, currentX, currentY;
 
 TCoordinatsAndStates = new Class({
    initialize: function (i,j) {
@@ -34,6 +34,7 @@ TDraw = new Class({
     },*/
 
     drawBall : function(ctx, pX, pY, size, numCol){
+        size *= 10;
         ctx.fillStyle = this.colourBall(numCol);
         ctx.beginPath();
         ctx.arc(pX,pY,size,0,2*Math.PI,false);
@@ -63,6 +64,7 @@ function createCenterCoordinates() {
 }
 
 function firstSettings() {
+    count = 0;
     isChoose = false;
     currentSmall = new Array(3);
     canvas = document.getElementById('canvas');
@@ -72,14 +74,16 @@ function firstSettings() {
     for (let i = 0;i<3;) {
         let a = randomPosition(2);
         let item = new TDraw();
-        item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, 20,table[a[0]][a[1]].numCol);
+        item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, table[a[0]][a[1]].statSize,
+            table[a[0]][a[1]].numCol);
         i++;
         }
     for (let i = 0;i<3;){
         let a = randomPosition(1);
         currentSmall[i] = a;
         let item = new TDraw();
-        item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, 10,table[a[0]][a[1]].numCol);
+        item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, table[a[0]][a[1]].statSize,
+            table[a[0]][a[1]].numCol);
         i++;
     }
 }
@@ -98,14 +102,15 @@ function drawCanvas(ctx) {
 }
 
 function selectElement(event) {
+    const ADD = -6;
     console.log("start "+event.clientX+" "+ event.clientY);
     for (let i = 0; i<table.length;i++){
         let f = false;
         for (let j = 0;j<table.length;j++){
-            if ((table[i][j].startX+(canvas.width/9) >= event.clientX)
-            && (table[i][j].startX <= (canvas.width/9)+event.clientX)
-            && (table[i][j].startY+(canvas.height/9) >= event.clientY)
-                && (table[i][j].startY <= (canvas.height/9)+event.clientY)){
+            if ((table[i][j].startX+(canvas.width/9) >= event.clientX+ADD)
+            && (table[i][j].startX <= (canvas.width/9)+event.clientX+ADD)
+            && (table[i][j].startY+(canvas.height/9) >= event.clientY + ADD)
+                && (table[i][j].startY <= (canvas.height/9)+event.clientY+ADD)){
                 console.log("pos "+i+" "+j);
                 f = true;
                 if (!isChoose) {
@@ -119,7 +124,7 @@ function selectElement(event) {
                     if (i === currentX && j === currentY){
                         console.log("reset");
                         isChoose = false;
-                    }else if (table[i][j].statSize === 0){
+                    } else if (table[i][j].statSize === 0){
                         console.log("choose place");
                         isChoose = false;
                         repositionElements(currentX,currentY,i,j);
@@ -144,13 +149,13 @@ function selectElement(event) {
 
 function move() {
     drawCanvas(context);
-    fromSmalltoBig();
+    fromSmallToBig();
     createSmallBall();
     for (let i = 0; i < table.length;i++){
         for (let j = 0; j < table[i].length;j++){
             if (table[i][j].statSize > 0) {
                 let item = new TDraw();
-                item.drawBall(context, table[i][j].centX, table[i][j].centY, table[i][j].statSize*10, table[i][j].numCol);
+                item.drawBall(context, table[i][j].centX, table[i][j].centY, table[i][j].statSize, table[i][j].numCol);
             }
         }
     }
@@ -173,7 +178,7 @@ function createSmallBall() {
     }
 }
 
-function fromSmalltoBig() {
+function fromSmallToBig() {
     for (let i = 0; i<currentSmall.length;i++) {
         table[currentSmall[i][0]][currentSmall[i][1]].statSize = 2;
     }
@@ -188,7 +193,7 @@ function randomPosition(s) {
     let y;
     do {
         x=Math.floor(Math.random()*9);
-    }while (!checkFullness(x));
+    } while (!checkFullness(x));
     for (let i = 0;i<table.length;i++){
         y=Math.floor(Math.random()*9);
         if (table[x][y].statSize === 0) {
