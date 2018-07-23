@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Gane «Color Lines»</title>
+    <meta name="description" content="Цель игры — собрать как можно больше линий из пяти и более шариков одного цвета.">
+    <meta name="keywords" content="игра, линии, color, lines, шарики">
     <link href="style.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mootools/1.6.0/mootools-core.js"></script>
     <script src="game.js"></script>
 </head>
+
 <body onload="firstSettings()">
 <div id="container_with_game">
     <canvas id="canvas" onclick="selectElement(event)" width="600" height="600"></canvas>
@@ -14,5 +18,13 @@
 </div>
 <div id="container_with_state">
 </div>
+
+<div class="description">
+    <p>Цель игры — собрать как можно больше линий из пяти и более шариков одного цвета.</p>
+</div>
+<div class="projects">
+    <h7>© 2018 Команда «-1»</h7>
+</div>
 </body>
+
 </html>
