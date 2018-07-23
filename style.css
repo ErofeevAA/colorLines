@@ -14,3 +14,22 @@
 #restart{
     position: relative;
 }
+
+
+
+element.style {
+}
+
+div {
+    display: block;
+}
+
+body
+{
+    background-color: #454545;
+    font: 81.25%/1.46 Arial, Helvetica, sans-serif;
+    color: #FFF;
+}
+
+
+P { text-align: center }
