@@ -18,7 +18,7 @@ let canvas,count, table, context, isChoose, currentSmall, currentX, currentY;
 });
 
     TDraw = new Class({
-        colour:['red','yellow','green','orange','blue','black','pink'],
+        colour:['Maroon','Goldenrod','green','Turquoise','blue','black','pink'],
         colourBall: function(c){
             return this.colour[c];
         },
@@ -45,11 +45,13 @@ let canvas,count, table, context, isChoose, currentSmall, currentX, currentY;
         drawSquare: function (ctx,pX,pY) {
             let s = canvas.height/9;
             ctx.fillStyle = "silver";
+            ctx.strokeStyle = "#454545"; //gray
+            ctx.lineWidth = 3.5;        //2
             ctx.beginPath();
-            ctx.shadowBlur = 15;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-            ctx.shadowColor = "black";
+            ctx.shadowBlur = 13;            //0
+            ctx.shadowOffsetX = 0;         //-4
+            ctx.shadowOffsetY = 0;        //-4
+            ctx.shadowColor = "black";   //#454545
             ctx.closePath();
             ctx.fillRect(pX,pY,s,s);
             ctx.strokeRect(pX,pY,s,s);

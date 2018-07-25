@@ -1,6 +1,8 @@
 #container_with_game{
     width: 400px;
     height: 630px;
+    text-align: right;
+
 }
 
 #container_with_state{
@@ -8,7 +10,6 @@
 }
 
 #canvas{
-    /*dummy*/
 }
 
 #restart{
@@ -16,12 +17,7 @@
 }
 
 
-
 element.style {
-}
-
-div {
-    display: block;
 }
 
 body
