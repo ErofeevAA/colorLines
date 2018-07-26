@@ -14,13 +14,26 @@
 <body onload="firstSettings()">
 <div id="container_with_game">
     <canvas id="canvas" onclick="selectElement(event)" width="600" height="600"></canvas>
-    <input type="button" id="restart" onclick="firstSettings()" value="Restart">
+    <div class="page-center game">
+        <div id="right-column">
+            <h1>Цветные линии(Color Lines)</h1>
+            <div class="description">
+                <p>Цель игры — собрать как можно больше линий из пяти и более шариков одного цвета.</p>
+            </div>
+            <div class="new-game">
+                <img src="new-game.png"
+                     alt="Новая игра"
+                     onclick="firstSettings()"
+                     style="cursor: pointer;">
+            </div>
+            <br>
+            <br>
+
+        </div>
 </div>
-<div id="container_with_state">
 </div>
 
-<div class="description">
-    <p>Цель игры — собрать как можно больше линий из пяти и более шариков одного цвета.</p>
+<div id="container_with_state">
 </div>
 </body>
 
