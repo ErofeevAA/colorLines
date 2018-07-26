@@ -1,4 +1,4 @@
-let canvas,count, table, context, isChoose, currentSmall, currentX, currentY;
+let canvas,count, table, context, isChoose, currentSmall, currentX, currentY, way;
 
     TCoordinatsAndStates = new Class({
        initialize: function (i,j) {
@@ -66,12 +66,12 @@ let canvas,count, table, context, isChoose, currentSmall, currentX, currentY;
     function createCenterCoordinates() {
             table = new Array(9);
             for (let i = 0; i < table.length; i++){
-                    table[i] = new Array(9);
-                    for (let j = 0; j < table.length;j++){
-                            table[i][j] = new TCoordinatsAndStates(i,j);
-                        }
+                table[i] = new Array(9);
+                for (let j = 0; j < table.length;j++){
+                    table[i][j] = new TCoordinatsAndStates(i,j);
                 }
-        }
+            }
+    }
 
 function firstSettings() {
         count = 0;
@@ -138,7 +138,10 @@ function selectElement(event) {
                                             } else if (table[i][j].statSize === 0){
                                                 console.log("choose place");
                                                 isChoose = false;
-                                                repositionElements(currentX,currentY,i,j);
+                                                if (checkRightLogicMove(currentX, currentY, i, j)) {
+                                                    repositionElements(currentX, currentY, i, j);
+                                            }else
+                                                isChoose = true;
                                             } else if (table[i][j].statSize === 1){
                                                 console.log("now reset");
                                                 isChoose = false;
@@ -203,8 +206,7 @@ function randomColour() {
         return Math.floor(Math.random()*7);
     }
 
-function randomPosition(s)
-{
+function randomPosition(s) {
     let x;
     let y;
     do {
@@ -229,4 +231,106 @@ function checkFullness(x) {
                     }
             }
         return false;
+}
+
+function checkRightLogicMove(xq,yq,x2,y2) {
+        let branch = [];
+        let x1 = xq;
+        let y1 = yq;
+        let c = false;
+        way = [];
+        way.push([x1,y1]);
+    while (true){
+        //check branch, shock content
+        if (
+            (
+                (x1 !== 8 && table[x1+1][y1].statSize !== 2 && table[x1+1][y1].statSize !== 3 && table[x1+1][y1].statSize !== 4) &&
+                (
+                    (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 && table[x1][y1+1].statSize !== 4) ||
+                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4) ||
+                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4)
+                )
+            ) ||
+            (
+                (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 && table[x1][y1+1].statSize !== 4) &&
+                (
+                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4) ||
+                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4)
+                )
+            ) ||
+            (
+                (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4) &&
+                (
+                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4)
+                )
+            )
+        ){
+            branch.push([x1,y1]);
+        }
+
+        if (x1 !== 8 && table[x1+1][y1].statSize !== 2 && table[x1+1][y1].statSize !== 3 &&
+            table[x1+1][y1].statSize !== 4){
+            x1 += 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+            if (x1 === x2 && y1 === y2){
+                c = true;
+                break;
+            }
+        } else if (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 &&
+            table[x1][y1+1].statSize !== 4){
+            y1 += 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+            if (x1 === x2 && y1 === y2){
+                c = true;
+                break;
+            }
+        } else if (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 &&
+            table[x1-1][y1].statSize !== 4){
+            x1 -= 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+            if (x1 === x2 && y1 === y2){
+                c = true;
+                break;
+            }
+        } else if (y1 !== 0 && table[x1][y1-1].statSize !== 2 && table[x1][y1-1].statSize !== 3 &&
+            table[x1][y1-1].statSize !== 4){
+            y1 -= 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+            if (x1 === x2 && y1 === y2){
+                c = true;
+                break;
+            }
+        } else {
+            if(branch.length === 0) {
+                c = false;
+                break;
+            }
+            else{
+                //table[x1][y1].statSize += 3;
+                x1 = branch[branch.length-1][0];
+                y1 = branch[branch.length-1][1];
+                branch.splice(branch.length-1,1);
+                //table[x1][y1].statSize -= 3;
+                for (let i = way.length-1; i>=0;i--){
+                    if (way[i][0] === x1 && way[i][1] === y1){
+                        break;
+                    }
+                    way.splice(i,1);
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i<table.length;i++){
+        for (let j = 0; j < table[i].length;j++){
+            if (table[i][j].statSize > 2){
+                table[i][j].statSize -= 3;
+            }
+        }
+    }
+    return c;
 }
