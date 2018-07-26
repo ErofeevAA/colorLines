@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Gane «Color Lines»</title>
+    <title>Game «Color Lines»</title>
+    <style>
+       /*html { overflow:  hidden; }*/
+    </style>
     <meta name="description" content="Цель игры — собрать как можно больше линий из пяти и более шариков одного цвета.">
     <meta name="keywords" content="игра, линии, color, lines, шарики">
     <link href="style.css" rel="stylesheet"/>
@@ -16,21 +19,17 @@
     <canvas id="canvas" onclick="selectElement(event)" width="600" height="600"></canvas>
     <div class="page-center game">
         <div id="right-column">
-            <h1>Цветные линии(Color Lines)</h1>
+            <p>Цветные линии(Color Lines)</p>
             <div class="description">
                 <p>Цель игры — собрать как можно больше линий из пяти и более шариков одного цвета.</p>
             </div>
             <div class="new-game">
-                <img src="new-game.png"
-                     alt="Новая игра"
+                <img src="new-game.png" width="100" height="100"
                      onclick="firstSettings()"
                      style="cursor: pointer;">
             </div>
-            <br>
-            <br>
-
         </div>
-</div>
+    </div>
 </div>
 
 <div id="container_with_state">
