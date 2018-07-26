@@ -1,3 +1,5 @@
+h1, h2, h3, h4, h5, h6, p {margin-top: 0;}
+
 #container_with_game{
     width: 400px;
     height: 630px;
@@ -12,20 +14,35 @@
 #canvas{
 }
 
-#restart{
-    position: relative;
+.page-center {
+
 }
 
+#right-column {
+    display: block;
+    left: 600px;
+    position: relative;
+    width: 560px;
+    bottom: 580px;
+}
 
-element.style {
+.description {
+    margin: 0 -118px 30px 0;
+    font: 11pt/17pt Arial, Helvetica, sans-serif;
+    color: #FFF;
+}
+
+.new-game {
+    position: relative;
+    left: -140px;
 }
 
 body
 {
-    background-color: #454545;
-    font: 81.25%/1.46 Arial, Helvetica, sans-serif;
+    background: url(page-bgr.png) #454545;
+    font: 81.25%/1.46  Arial, Helvetica, sans-serif;
     color: #FFF;
 }
 
 
-P { text-align: center }
+
