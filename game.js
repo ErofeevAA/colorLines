@@ -130,7 +130,7 @@ function selectElement(event) {
                         currentY = j;
                         isChoose = true;
                     }
-                }else{
+                } else{
                     if (i === currentX && j === currentY){
                         console.log("reset");
                         isChoose = false;
@@ -142,7 +142,7 @@ function selectElement(event) {
                             currentX = i;
                             currentY = j;
                             move();
-                        }else
+                        } else
                             isChoose = true;
                     } else if (table[i][j].statSize === 1){
                         console.log("choose place with small ball");
@@ -160,7 +160,7 @@ function selectElement(event) {
                             currentX = i;
                             currentY = j;
                             move();
-                        }else
+                        } else
                             isChoose = true;
                     } else {
                         console.log("choose ball");
@@ -252,10 +252,8 @@ function checkFullness(x) {
     return false;
 }
 
-function checkRightLogicMove(xq,yq,x2,y2) {
+function checkRightLogicMove(x1,y1,x2,y2) {
     let branch = [];
-    let x1 = xq;
-    let y1 = yq;
     let c = false;
     way = [];
     way.push([x1,y1]);
@@ -267,20 +265,20 @@ function checkRightLogicMove(xq,yq,x2,y2) {
                 (
                     (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 && table[x1][y1+1].statSize !== 4) ||
                     (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4) ||
-                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4)
+                    (y1 !== 0 && table[x1][y1-1].statSize !== 2 && table[x1][y1-1].statSize !== 3 && table[x1][y1-1].statSize !== 4)
                 )
             ) ||
             (
                 (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 && table[x1][y1+1].statSize !== 4) &&
                 (
                     (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4) ||
-                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4)
+                    (y1 !== 0 && table[x1][y1-1].statSize !== 2 && table[x1][y1-1].statSize !== 3 && table[x1][y1-1].statSize !== 4)
                 )
             ) ||
             (
                 (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4) &&
                 (
-                    (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 && table[x1-1][y1].statSize !== 4)
+                    (y1 !== 0 && table[x1][y1-1].statSize !== 2 && table[x1][y1-1].statSize !== 3 && table[x1][y1-1].statSize !== 4)
                 )
             )
         ){
