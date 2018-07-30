@@ -78,7 +78,7 @@ function firstSettings() {
     createCenterCoordinates();
     context = canvas.getContext('2d');
     drawCanvas(context);
-    for (let i = 0;i<3;) {
+    for (let i = 0;i<4;) {
         let a = randomPosition(2);
         let item = new TDraw();
         item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, table[a[0]][a[1]].statSize,
@@ -158,8 +158,7 @@ function selectElement(event) {
                                 }
                             }
                             repositionElements(currentX, currentY, i, j);
-                            currentX = i;
-                            currentY = j;
+                            deleteLines(i,j);
                             move();
                         } else
                             isChoose = true;
@@ -181,10 +180,13 @@ function selectElement(event) {
 
 function move() {
     drawCanvas(context);
-    fromSmallToBig();
-    if (count < 81)
-        createSmallBall();
-    else
+    if (count < 79){
+        fromSmallToBig(3);
+        createSmallBall(3);
+    } else if (count < 81){
+        fromSmallToBig(81-count);
+        createSmallBall(81-count);
+    } else
         alert("You lose!");
     for (let i = 0; i < table.length;i++){
         for (let j = 0; j < table[i].length;j++){
@@ -206,16 +208,17 @@ function animationMove() {
 
         }
 
-function createSmallBall() {
-    for (let i = 0; i<currentSmall.length;i++) {
+function createSmallBall(c) {
+    for (let i = 0; i<c;i++) {
         currentSmall[i] = randomPosition(1);
         count++;
     }
 }
 
-function fromSmallToBig() {
-    for (let i = 0; i<currentSmall.length;i++) {
+function fromSmallToBig(c) {
+    for (let i = 0; i<c;i++) {
         table[currentSmall[i][0]][currentSmall[i][1]].statSize = 2;
+        deleteLines(currentSmall[i][0],currentSmall[i][1]);
     }
 }
 
@@ -438,6 +441,7 @@ function deleteLines(x,y) {
                 if (a[i] !== undefined) {
                     console.log(a[i][j][0] + " " + a[i][j][0]);
                     table[a[i][j][0]][a[i][j][1]].statSize = 0;
+                    --count;
                 }
             }
         }
