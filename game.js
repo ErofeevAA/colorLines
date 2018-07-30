@@ -1,4 +1,4 @@
-let canvas,count, table, context, isChoose, currentSmall, currentX, currentY, way;
+let canvas,count, table, context, isChoose, currentSmall, currentX, currentY, way, audio;
 
 TCoordinatsAndStates = new Class({
     initialize: function (i,j) {
@@ -21,20 +21,18 @@ TDraw = new Class({
     colourBall: function(c){
         return this.colour[c];
         },
-   /* create later
-   gradientBall: function(ctx){
-        console.log("Current start number for gradient: "+ this.rBall/8);
-        console.log("Current numbers. posX="+this.posX+" posY="+this.posY);
-        let gradient = ctx.createRadialGradient(this.posX,
-            this.posY, this.rBall / 8, this.posX, this.posY, this.rBall);
-        gradient.addColorStop(1, this.colBall);
-        gradient.addColorStop(0, '#fff');
+
+    gradientBall: function(ctx, pX, pY, size, numCol)
+    {
+        let gradient = ctx.createRadialGradient(pX, pY, size/8, pX, pY, size);
+        gradient.addColorStop(1, this.colourBall(numCol));
+        gradient.addColorStop(0, '#F8F8FF');
         return gradient;
-    },*/
+    },
 
    drawBall : function(ctx, pX, pY, size, numCol){
        size *= 10;
-       ctx.fillStyle = this.colourBall(numCol);
+       ctx.fillStyle = this.gradientBall(ctx, pX, pY, size, numCol);
        ctx.beginPath();
        ctx.shadowBlur = 1;
        ctx.shadowOffsetX = -2.5;
@@ -96,6 +94,10 @@ function firstSettings() {
         i++;
     }
     count = 6;
+
+    audio = new Audio();
+    audio.src = 'Audio/fon_Music.mp3';
+    audio.autoplay = true;
 }
 
 function drawCanvas(ctx) {
@@ -349,3 +351,15 @@ function checkRightLogicMove(x1,y1,x2,y2) {
     }
     return c;
 }
+
+
+function soundClick() {
+    console.log(audio.paused);
+    if (!audio.paused) {
+        audio.pause()
+    }
+    else audio.play();
+}
+
+
+
