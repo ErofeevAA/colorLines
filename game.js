@@ -17,7 +17,7 @@ TCoordinatsAndStates = new Class({
 });
 
 TDraw = new Class({
-    colour:['FireBrick','Indigo','green','Turquoise','DodgerBlue','black','pink'],
+    colour:['FireBrick','Indigo','green','yellow','DodgerBlue','black','pink'],
     colourBall: function(c){
         return this.colour[c];
         },
@@ -141,8 +141,7 @@ function selectElement(event) {
                         isChoose = false;
                         if (checkRightLogicMove(currentX, currentY, i, j)) {
                             repositionElements(currentX, currentY, i, j);
-                            currentX = i;
-                            currentY = j;
+                            deleteLines(i,j);
                             move();
                         } else
                             isChoose = true;
@@ -361,5 +360,88 @@ function soundClick() {
     else audio.play();
 }
 
+function getLines(x,y){
+    let lines = [false,[[x,y]],[[x,y]],[[x,y]],[[x,y]]];
+
+    let l, r, d, u, lu, ru, ld, rd;
+    l = r = d = u = lu = ru = ld = rd = true;
+
+    let i = 1;
+    while(l || r || u || d || lu || ru || ld || rd){
+        console.log(x+" " +y+" "+i);
+        if(l && x-i>=0 && table[x][y].numCol===table[x-i][y].numCol && table[x][y].statSize===table[x-i][y].statSize){
+            lines[1].push([x-i,y]);
+        } else {
+            l = false;
+        }
+        if(r && x+i<=8 && table[x][y].numCol===table[x+i][y].numCol && table[x][y].statSize===table[x+i][y].statSize){
+            lines[1].push([x+i,y]);
+        } else {
+            r = false;
+        }
+
+        if(u && y-i>=0 && table[x][y].numCol===table[x][y-i].numCol && table[x][y].statSize===table[x][y-i].statSize){
+            lines[2].push([x,y-i]);
+        } else {
+            u = false;
+        }
+        if(d && y+i<=8 && table[x][y].numCol===table[x][y+i].numCol && table[x][y].statSize===table[x][y+i].statSize){
+            lines[2].push([x,y+i]);
+        } else {
+            d = false;
+        }
+
+        if(lu && y-i>=0 && x-i>=0 && table[x][y].numCol===table[x-i][y-i].numCol && table[x][y].statSize===table[x-i][y-i].statSize){
+            lines[3].push([x-i,y-i]);
+        } else {
+            lu = false;
+        }
+        if(rd && y+i<=8 && x+i<=8 && table[x][y].numCol===table[x+i][y+i].numCol && table[x][y].statSize===table[x+i][y+i].statSize){
+            lines[3].push([x+i,y+i]);
+        } else {
+            rd = false;
+        }
+
+        if(ld && y+i<=8 && x-i>=0 && table[x][y].numCol===table[x-i][y+i].numCol && table[x][y].statSize===table[x-i][y+i].statSize){
+            lines[4].push([x-i,y+i]);
+        } else {
+            ld = false;
+        }
+        if(ru && y-i>=0 && (x+i)<=8 && table[x][y].numCol===table[x+i][y-i].numCol && table[x][y].statSize===table[x+i][y-i].statSize){
+            lines[4].push([x+i,y-i]);
+        } else {
+            ru = false;
+        }
+
+        i++;
+        console.log(x+" " +y+" "+i+" "+2);
+
+    }
+    for(let i = lines.length-1; i>=1; i--){
+        console.log(lines[i]);
+        if(lines[i].length < 5){
+            lines.splice(i,1);
+        }else{
+            lines[0] = true;
+        }
+
+    }
+    return lines;
+
+}
+
+function deleteLines(x,y) {
+    let a = getLines(x,y);
+    if (a[0] === true){
+        for (let i = 1;i<a.length;i++){
+            for (let j = 0; j<a[i].length;j++) {
+                if (a[i] !== undefined) {
+                    console.log(a[i][j][0] + " " + a[i][j][0]);
+                    table[a[i][j][0]][a[i][j][1]].statSize = 0;
+                }
+            }
+        }
+    }
+}
 
 
