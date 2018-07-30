@@ -11,7 +11,7 @@ TCoordinatsAndStates = new Class({
     startY:0,
     centX: 0,
     centY: 0,
-    C:33,
+    C:31,
     statSize:0,
     numCol:0
 });
