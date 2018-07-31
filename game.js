@@ -450,7 +450,6 @@ function deleteLines(x,y) {
         }
     }
 }
-
 function createForecastballs(i,colour) {
     let canvas2 = document.getElementById('canvas_for_small_ball');
     let context2 = canvas2.getContext('2d');
@@ -460,5 +459,4 @@ function createForecastballs(i,colour) {
         if (c==0){foreball.drawBall(context2, c+=25,c+=0, 2, s);}
         else if(c==1){foreball.drawBall(context2, c+=25,c+=50, 2, s);}
         else if(c==2){foreball.drawBall(context2, c+=25,c+=100, 2, s);}
-
 }
