@@ -91,6 +91,7 @@ function firstSettings() {
         let item = new TDraw();
         item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, table[a[0]][a[1]].statSize,
             table[a[0]][a[1]].numCol);
+        createForecastballs(i,table[a[0]][a[1]].numCol);
         i++;
     }
     count = 6;
@@ -209,6 +210,7 @@ function animationMove() {
 function createSmallBall(c) {
     for (let i = 0; i<c;i++) {
         currentSmall[i] = randomPosition(1);
+        createForecastballs(i,table[currentSmall[i][0]][currentSmall[i][1]].numCol);
         count++;
     }
 }
@@ -448,5 +450,13 @@ function deleteLines(x,y) {
         }
     }
 }
-
-
+function createForecastballs(i,colour) {
+    let canvas2 = document.getElementById('canvas_for_small_ball');
+    let context2 = canvas2.getContext('2d');
+    let c=i;
+    let s=colour;
+        let foreball = new TDraw();
+        if (c==0){foreball.drawBall(context2, c+=25,c+=0, 2, s);}
+        else if(c==1){foreball.drawBall(context2, c+=25,c+=50, 2, s);}
+        else if(c==2){foreball.drawBall(context2, c+=25,c+=100, 2, s);}
+}
