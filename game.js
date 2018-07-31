@@ -355,6 +355,7 @@ function checkRightLogicMove(x1,y1,x2,y2) {
 audio = new Audio();
 audio.src = 'Audio/fon_Music.mp3';
 audio.autoplay = true;
+audio.loop = true;
 function soundClick() {
     console.log(audio.paused);
     if (!audio.paused) {
