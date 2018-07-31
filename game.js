@@ -95,9 +95,7 @@ function firstSettings() {
     }
     count = 6;
 
-    audio = new Audio();
-    audio.src = 'Audio/fon_Music.mp3';
-    audio.autoplay = true;
+
 }
 
 function drawCanvas(ctx) {
@@ -354,7 +352,9 @@ function checkRightLogicMove(x1,y1,x2,y2) {
     return c;
 }
 
-
+audio = new Audio();
+audio.src = 'Audio/fon_Music.mp3';
+audio.autoplay = true;
 function soundClick() {
     console.log(audio.paused);
     if (!audio.paused) {
