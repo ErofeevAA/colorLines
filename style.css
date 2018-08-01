@@ -34,11 +34,11 @@ p {margin-top: 0;}
 
 #score {
     position: relative;
-    background: #fff;
-    width: 150px;
-    height: 50px;
-    left: 270px;
-    bottom: 20px;
+    width: 220px;
+    height: 120px;
+    left: 425px;
+    bottom: 255px;
+    text-align: left;
 
 }
 
