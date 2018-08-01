@@ -532,5 +532,5 @@ function createForecastballs(i,colour) {
 function score() {
     if(currentScore > maxScore){maxScore = currentScore;}
     let s  = document.getElementById('score');
-    s.innerHTML = currentScore+" "+ maxScore;
+    s.innerHTML = 'Score: '+currentScore +' <br></br>Record: '+ maxScore;
 }
