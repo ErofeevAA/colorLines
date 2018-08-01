@@ -1,4 +1,4 @@
-let canvas,count, table, context, isChoose, currentSmall, currentX, currentY, way, audio;
+let canvas,count, table, context, isChoose, currentSmall, moveCX, moveCY, currentX, currentY, way, audio, idTimer,t;
 
 TCoordinatsAndStates = new Class({
     initialize: function (i,j) {
@@ -71,6 +71,8 @@ function createCenterCoordinates() {
 }
 
 function firstSettings() {
+    idTimer = [];
+    t = 0;
     count = 0;
     isChoose = false;
     currentSmall = new Array(3);
@@ -94,7 +96,7 @@ function firstSettings() {
         createForecastballs(i,table[a[0]][a[1]].numCol);
         i++;
     }
-    count = 6;
+    count = 7;
 
 
 }
@@ -140,8 +142,8 @@ function selectElement(event) {
                         isChoose = false;
                         if (checkRightLogicMove(currentX, currentY, i, j)) {
                             repositionElements(currentX, currentY, i, j);
-                            deleteLines(i,j);
-                            move();
+                            //deleteLines(i,j);
+                            //move();
                         } else
                             isChoose = true;
                     } else if (table[i][j].statSize === 1){
@@ -158,7 +160,6 @@ function selectElement(event) {
                             }
                             repositionElements(currentX, currentY, i, j);
                             deleteLines(i,j);
-                            move();
                         } else
                             isChoose = true;
                     } else {
@@ -183,7 +184,7 @@ function move() {
         fromSmallToBig(3);
         createSmallBall(3);
     } else if (count < 81){
-        fromSmallToBig(81-count);
+        fromSmallToBig(3);
         createSmallBall(81-count);
     } else
         alert("You lose!");
@@ -198,14 +199,59 @@ function move() {
 }
 
 function repositionElements(x1,y1,x2,y2) {
-    table[x2][y2].statSize = table[x1][y1].statSize;
-    table[x1][y1].statSize = 0;
-    table[x2][y2].numCol = table[x1][y1].numCol;
+    moveCX = table[x1][y1].centX;
+    moveCY = table[x1][y1].centY;
+    if (table[x2][y2].statSize === 0)
+        startMove(x1,y1,x2,y2);
+    else {
+        table[x2][y2].statSize = table[x1][y1].statSize;
+        table[x1][y1].statSize = 0;
+        table[x2][y2].numCol = table[x1][y1].numCol;
+    }
+
 }
 
-function animationMove() {
-
+let c = 0;
+function animationMove(x1,y1,x2,y2) {
+    drawCanvas(context);
+    if(moveCX === table[x2][y2].centX && moveCY === table[x2][y2].centY) {
+        c = 0;
+        stopMove();
+        table[x2][y2].statSize = table[x1][y1].statSize;
+        table[x1][y1].statSize = 0;
+        table[x2][y2].numCol = table[x1][y1].numCol;
+        deleteLines(x2,y2);
+        move();
+    } else {
+        moveCX = table[way[c][0]][way[c][1]].centX;
+        moveCY = table[way[c][0]][way[c][1]].centY;
+        c++;
+        for (let i = 0; i < table.length; i++) {
+            for (let j = 0; j < table[i].length; j++) {
+                if (table[i][j].statSize > 0) {
+                    let item = new TDraw();
+                    if (i === x1 && j === y1) {
+                        item.drawBall(context, moveCX, moveCY, table[i][j].statSize, table[i][j].numCol);
+                    }
+                    else {
+                        item.drawBall(context, table[i][j].centX, table[i][j].centY, table[i][j].statSize, table[i][j].numCol);
+                    }
+                }
+            }
         }
+    }
+
+}
+
+function startMove(x1,y1,x2,y2){
+    idTimer[t++] = setInterval('animationMove('+x1+','+y1+','+x2+','+y2+');',50);
+}
+
+function stopMove() {
+    for (let i = 0; i < t; i++) {
+        clearInterval(idTimer[i]);
+    }
+}
 
 function createSmallBall(c) {
     for (let i = 0; i<c;i++) {
@@ -289,42 +335,52 @@ function checkRightLogicMove(x1,y1,x2,y2) {
             branch.push([x1,y1]);
         }
 
+        if (x1 === x2 && y1 === y2){
+            c = true;
+            break;
+        }
+
         if (x1 !== 8 && table[x1+1][y1].statSize !== 2 && table[x1+1][y1].statSize !== 3 &&
+            table[x1+1][y1].statSize !== 4 && x1<x2) {
+            x1 += 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1, y1]);
+        } else if (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 &&
+            table[x1][y1+1].statSize !== 4 && y1<y2){
+            y1 += 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+        } else if (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 &&
+            table[x1-1][y1].statSize !== 4 && x1>x2){
+            x1 -= 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+        } else if (y1 !== 0 && table[x1][y1-1].statSize !== 2 && table[x1][y1-1].statSize !== 3 &&
+            table[x1][y1-1].statSize !== 4 && y1>y2){
+            y1 -= 1;
+            table[x1][y1].statSize += 3;
+            way.push([x1,y1]);
+        }
+        else if (x1 !== 8 && table[x1+1][y1].statSize !== 2 && table[x1+1][y1].statSize !== 3 &&
             table[x1+1][y1].statSize !== 4){
             x1 += 1;
             table[x1][y1].statSize += 3;
             way.push([x1,y1]);
-            if (x1 === x2 && y1 === y2){
-                c = true;
-                break;
-            }
         } else if (y1 !== 8 && table[x1][y1+1].statSize !== 2 && table[x1][y1+1].statSize !== 3 &&
             table[x1][y1+1].statSize !== 4){
             y1 += 1;
             table[x1][y1].statSize += 3;
             way.push([x1,y1]);
-            if (x1 === x2 && y1 === y2){
-                c = true;
-                break;
-            }
         } else if (x1 !== 0 && table[x1-1][y1].statSize !== 2 && table[x1-1][y1].statSize !== 3 &&
             table[x1-1][y1].statSize !== 4){
             x1 -= 1;
             table[x1][y1].statSize += 3;
             way.push([x1,y1]);
-            if (x1 === x2 && y1 === y2){
-                c = true;
-                break;
-            }
         } else if (y1 !== 0 && table[x1][y1-1].statSize !== 2 && table[x1][y1-1].statSize !== 3 &&
             table[x1][y1-1].statSize !== 4){
             y1 -= 1;
             table[x1][y1].statSize += 3;
             way.push([x1,y1]);
-            if (x1 === x2 && y1 === y2){
-                c = true;
-                break;
-            }
         } else {
             if(branch.length === 0) {
                 c = false;
@@ -454,9 +510,12 @@ function createForecastballs(i,colour) {
     let canvas2 = document.getElementById('canvas_for_small_ball');
     let context2 = canvas2.getContext('2d');
     let c=i;
-    let s=colour;
-        let foreball = new TDraw();
-        if (c==0){foreball.drawBall(context2, c+=25,c+=0, 2, s);}
-        else if(c==1){foreball.drawBall(context2, c+=25,c+=50, 2, s);}
-        else if(c==2){foreball.drawBall(context2, c+=25,c+=100, 2, s);}
+    let foreball = new TDraw();
+    if (c===0){
+        foreball.drawBall(context2, c+=25,c, 2, colour);
+    } else if(c===1){
+        foreball.drawBall(context2, c+=25,c+50, 2, colour);
+    } else if(c===2){
+        foreball.drawBall(context2, c+=25,c+100, 2, colour);
+    }
 }
