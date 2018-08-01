@@ -97,6 +97,7 @@ function firstSettings() {
         createForecastballs(i,table[a[0]][a[1]].numCol);
         i++;
     }
+    score();
 }
 
 function drawCanvas(ctx) {
@@ -498,12 +499,17 @@ function deleteLines(x,y) {
     let a = getLines(x,y);
     if (a[0] === true){
         for (let i = 1;i<a.length;i++){
+            if (a[i].length===5){currentScore+=3;}else
+            if (a[i].length===6){currentScore+=6;}else
+            if (a[i].length===7){currentScore+=11;}else
+            if (a[i].length===8){currentScore+=14;}else
+            if (a[i].length===9){currentScore+=15;}
+            console.log(currentScore);
             for (let j = 0; j<a[i].length;j++) {
                 if (a[i] !== undefined) {
                     console.log(a[i][j][0] + " " + a[i][j][0]);
                     table[a[i][j][0]][a[i][j][1]].statSize = 0;
                     --count;
-                    currentScore++;
                 }
             }
         }
@@ -524,6 +530,7 @@ function createForecastballs(i,colour) {
 }
 
 function score() {
+    if(currentScore > maxscore){maxscore = currentScore;}
     let s  = document.getElementById('score');
     s.innerHTML = currentScore+" "+ maxScore;
 }
