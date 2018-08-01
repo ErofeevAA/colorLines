@@ -15,20 +15,26 @@ p {margin-top: 0;}
 }
 
 .page-center {
-
+    position: relative;
+    width: 180px;
+    height: 40px;
+    left: 890px;
+    bottom: 590px;
 }
 
 #right-column {
     display: block;
-    left: 600px;
+    text-align: center;
+    left: -240px;
     position: relative;
-    width: 560px;
-    bottom: 580px;
+    width: 660px;
+    height: 505px;
+    bottom: -10px;
 }
 
 #canvas_for_small_ball{
     position: relative;
-    left: -300px;
+    left: -120px;
     top: 80px;
 }
 
@@ -36,7 +42,7 @@ p {margin-top: 0;}
     position: relative;
     width: 220px;
     height: 120px;
-    left: 425px;
+    left: 405px;
     bottom: 255px;
     text-align: left;
 
@@ -44,8 +50,8 @@ p {margin-top: 0;}
 
 .description {
     margin: 0 -118px 30px 0;
-    width: 640px;
-    font: 11pt/19pt Arial, Helvetica, sans-serif;
+    width: 660px;
+    font: 17pt/26pt Arial, Helvetica, sans-serif;
     color: #FFF;
 }
 
@@ -53,7 +59,7 @@ p {margin-top: 0;}
     position: relative;
     width: 100px;
     height: 100px;
-    left: 290px;
+    left: 270px;
     bottom: 130px;
 }
 
@@ -61,7 +67,7 @@ p {margin-top: 0;}
     position: relative;
     width: 100px;
     height: 100px;
-    left: 290px;
+    left: 270px;
     top: -70px;
 }
 
