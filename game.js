@@ -150,11 +150,17 @@ function selectElement(event) {
                             let c = table[i][j].numCol;
                             let a;
                             for(let z = 0; z<currentSmall.length;z++){
+                                console.log("count "+count);
                                 if (currentSmall[z][0] === i && currentSmall[z][1] === j){
-                                    a = randomPosition(1);
                                     if (count > 79){
+                                        let c = table[i][j].numCol;
+                                        table[i][j].statSize = 2;
+                                        table[i][j].numCol = table[currentX][currentY].numCol;
+                                        table[currentX][currentY].numCol = c;
+                                        redrawCanvas();
                                         break;
                                     }
+                                    a = randomPosition(1);
                                     repositionElements(i,j,a[0],a[1]);
                                     currentSmall[z] = a;
                                     deleteLines(a[0],a[1]);
