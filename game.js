@@ -1,4 +1,4 @@
-let canvas,count, table, context, isChoose, currentSmall, moveCX, moveCY, currentX, currentY, way, audio, idTimer,t;
+let canvas,count, table, context, isChoose, currentSmall, moveCX, moveCY, currentX, currentY, way, audio,currentScore,maxScore = 0, idTimer,t;
 
 TCoordinatsAndStates = new Class({
     initialize: function (i,j) {
@@ -73,7 +73,8 @@ function createCenterCoordinates() {
 function firstSettings() {
     idTimer = [];
     t = 0;
-    count = 0;
+    count = 7;
+    currentScore = 0;
     isChoose = false;
     currentSmall = new Array(3);
     canvas = document.getElementById('canvas');
@@ -96,9 +97,6 @@ function firstSettings() {
         createForecastballs(i,table[a[0]][a[1]].numCol);
         i++;
     }
-    count = 7;
-
-
 }
 
 function drawCanvas(ctx) {
@@ -142,24 +140,27 @@ function selectElement(event) {
                         isChoose = false;
                         if (checkRightLogicMove(currentX, currentY, i, j)) {
                             repositionElements(currentX, currentY, i, j);
-                            //deleteLines(i,j);
-                            //move();
                         } else
                             isChoose = true;
                     } else if (table[i][j].statSize === 1){
                         console.log("choose place with small ball");
                         isChoose = false;
                         if (checkRightLogicMove(currentX, currentY, i, j)) {
+                            let c = table[i][j].numCol;
+                            let a;
                             for(let z = 0; z<currentSmall.length;z++){
                                 if (currentSmall[z][0] === i && currentSmall[z][1] === j){
-                                    let a = randomPosition(1);
+                                    a = randomPosition(1);
+                                    if (count > 79){
+                                        break;
+                                    }
                                     repositionElements(i,j,a[0],a[1]);
                                     currentSmall[z] = a;
+                                    deleteLines(a[0],a[1]);
                                     break;
                                 }
                             }
                             repositionElements(currentX, currentY, i, j);
-                            deleteLines(i,j);
                         } else
                             isChoose = true;
                     } else {
@@ -178,7 +179,7 @@ function selectElement(event) {
     }
 }
 
-function move() {
+function redrawCanvas() {
     drawCanvas(context);
     if (count < 79){
         fromSmallToBig(3);
@@ -188,6 +189,7 @@ function move() {
         createSmallBall(81-count);
     } else
         alert("You lose!");
+    score();
     for (let i = 0; i < table.length;i++){
         for (let j = 0; j < table[i].length;j++){
             if (table[i][j].statSize > 0) {
@@ -221,7 +223,7 @@ function animationMove(x1,y1,x2,y2) {
         table[x1][y1].statSize = 0;
         table[x2][y2].numCol = table[x1][y1].numCol;
         deleteLines(x2,y2);
-        move();
+        redrawCanvas();
     } else {
         moveCX = table[way[c][0]][way[c][1]].centX;
         moveCY = table[way[c][0]][way[c][1]].centY;
@@ -501,6 +503,7 @@ function deleteLines(x,y) {
                     console.log(a[i][j][0] + " " + a[i][j][0]);
                     table[a[i][j][0]][a[i][j][1]].statSize = 0;
                     --count;
+                    currentScore++;
                 }
             }
         }
@@ -518,4 +521,9 @@ function createForecastballs(i,colour) {
     } else if(c===2){
         foreball.drawBall(context2, c+=25,c+100, 2, colour);
     }
+}
+
+function score() {
+    let s  = document.getElementById('score');
+    s.innerHTML = currentScore+" "+ maxScore;
 }
