@@ -81,6 +81,7 @@ function firstSettings() {
     createCenterCoordinates();
     context = canvas.getContext('2d');
     drawCanvas(context);
+    canvas.disabled = true;
     for (let i = 0;i<4;) {
         let a = randomPosition(2);
         let item = new TDraw();
@@ -194,24 +195,29 @@ function selectElement(event) {
 
 function redrawCanvas() {
     drawCanvas(context);
+    let c = false;
     if (count < 79){
         fromSmallToBig(3);
         createSmallBall(3);
     } else if (count < 81){
         fromSmallToBig(3);
         createSmallBall(81-count);
-    } else
-        alert("You lose!");
+    } else {
+        c = true;
+    }
     score();
-    for (let i = 0; i < table.length;i++){
-        for (let j = 0; j < table[i].length;j++){
+    for (let i = 0; i < table.length; i++) {
+        for (let j = 0; j < table[i].length; j++) {
             if (table[i][j].statSize > 0) {
                 let item = new TDraw();
                 item.drawBall(context, table[i][j].centX, table[i][j].centY, table[i][j].statSize, table[i][j].numCol);
             }
         }
     }
+    if (c)
+        endDialog();
 }
+
 
 function repositionElements(x1,y1,x2,y2) {
     moveCX = table[x1][y1].centX;
@@ -271,8 +277,8 @@ function stopMove() {
 function createSmallBall(c) {
     for (let i = 0; i<c;i++) {
         currentSmall[i] = randomPosition(1);
-        createForecastballs(i,table[currentSmall[i][0]][currentSmall[i][1]].numCol);
         count++;
+        createForecastballs(i,table[currentSmall[i][0]][currentSmall[i][1]].numCol);
     }
 }
 
@@ -545,4 +551,18 @@ function score() {
     if(currentScore > maxScore){maxScore = currentScore;}
     let s  = document.getElementById('score');
     s.innerHTML = 'Score: '+currentScore +' <br></br>Record: '+ maxScore;
+}
+
+function endDialog() {
+    context.fillStyle = "Goldenrod";
+    context.strokeStyle = "DarkGoldenrod";
+    context.lineWidth = 3;
+    context.fillRect(0,0,canvas.width,canvas.height);
+    context.strokeRect(0,0,canvas.width,canvas.height);
+    context.fillStyle =  "black";
+    context.strokeStyle = "black";
+    context.font = "italic 30pt Arial";
+    context.fillText("Game", 100,100);
+    context.font = 'bold 40pt sans-serif';
+    context.strokeText("Over", 200,200);
 }
