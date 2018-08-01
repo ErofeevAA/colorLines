@@ -157,6 +157,12 @@ function selectElement(event) {
                                         table[i][j].statSize = 2;
                                         table[i][j].numCol = table[currentX][currentY].numCol;
                                         table[currentX][currentY].numCol = c;
+                                        if(c === table[i][j].numCol) {
+                                            deleteLines(i, j);
+                                        } else {
+                                            deleteLines(i,j);
+                                            deleteLines(currentX,currentY);
+                                        }
                                         redrawCanvas();
                                         break;
                                     }
