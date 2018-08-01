@@ -530,7 +530,7 @@ function createForecastballs(i,colour) {
 }
 
 function score() {
-    if(currentScore > maxscore){maxscore = currentScore;}
+    if(currentScore > maxScore){maxScore = currentScore;}
     let s  = document.getElementById('score');
     s.innerHTML = currentScore+" "+ maxScore;
 }
