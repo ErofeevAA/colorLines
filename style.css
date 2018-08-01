@@ -1,10 +1,7 @@
-p {margin-top: 0;}
 
 #container_with_game{
-    width: 600px;
-    height: 600px;
-    text-align: right;
-
+    width: 611px;
+    height: 611px;
 }
 
 #container_with_state{
@@ -12,63 +9,64 @@ p {margin-top: 0;}
 }
 
 #canvas{
+    border-width: 3px;
+    border-style: solid;
+    border-color: goldenrod;
+    border-radius: 10px;
 }
 
 .page-center {
     position: relative;
-    width: 180px;
-    height: 40px;
-    left: 890px;
-    bottom: 590px;
-}
-
-#right-column {
-    display: block;
     text-align: center;
-    left: -240px;
-    position: relative;
-    width: 660px;
-    height: 505px;
-    bottom: -10px;
-}
-
-#canvas_for_small_ball{
-    position: relative;
-    left: -120px;
-    top: 80px;
-}
-
-#score {
-    position: relative;
-    width: 220px;
-    height: 120px;
-    left: 405px;
-    bottom: 255px;
-    text-align: left;
-
+    width: 26%;
+    height: 150px;
+    left: 630px;
+    bottom: 615px;
+    box-sizing: content-box;
 }
 
 .description {
-    margin: 0 -118px 30px 0;
-    width: 660px;
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    top: 50px;
     font: 17pt/26pt Arial, Helvetica, sans-serif;
     color: #FFF;
 }
 
-.new-game {
+#right-column {
     position: relative;
-    width: 100px;
-    height: 100px;
-    left: 270px;
-    bottom: 130px;
+    text-align: center;
+    width: 26%;
+    height: 390px;
+    left: 630px;
+    bottom: 595px;
+    box-sizing: content-box;
+}
+
+#canvas_for_small_ball{
+    position: absolute;
+    left: 170px;
+    top: 90px;
+}
+
+#score {
+    position: absolute;
+    left: 380px;
+    top: 110px;
+    text-align: left;
+}
+
+.new-game {
+    position: absolute;
+    left: 250px;
+    top: 40px;
 }
 
 .play {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    left: 270px;
-    top: -70px;
+    position: absolute;
+    left: 250px;
+    top: 190px;
 }
 
 body
@@ -78,9 +76,4 @@ body
     font: 24pt Arial, Helvetica, sans-serif;
     color: #FFF;
 }
-
-
-
-
-
 
