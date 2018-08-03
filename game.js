@@ -2,8 +2,9 @@ let canvas,count, table, context, isChoose, currentSmall, moveCX, moveCY, curren
 
 TCoordinatsAndStates = new Class({
     initialize: function (i,j) {
-        this.centX = this.C + (i*(canvas.width/9));
-        this.centY = this.C + (j*(canvas.height/9));
+        let C = (canvas.width/9)/2-2;
+        this.centX = C + (i*(canvas.width/9));
+        this.centY = C + (j*(canvas.height/9));
         this.startX = i*(canvas.width/9);
         this.startY = j*(canvas.height/9);
         },
@@ -11,26 +12,23 @@ TCoordinatsAndStates = new Class({
     startY:0,
     centX: 0,
     centY: 0,
-    C:31,
     statSize:0,
     numCol:0
 });
-
 TDraw = new Class({
     colour:['FireBrick','Indigo','green','yellow','DodgerBlue','black','pink'],
     colourBall: function(c){
         return this.colour[c];
-        },
+        }.protect(),
 
-    gradientBall: function(ctx, pX, pY, size, numCol)
-    {
+     gradientBall: function(ctx, pX, pY, size, numCol) {
         let gradient = ctx.createRadialGradient(pX, pY, size/8, pX, pY, size);
         gradient.addColorStop(1, this.colourBall(numCol));
         gradient.addColorStop(0, '#F8F8FF');
         return gradient;
-    },
+    }.protect(),
 
-   drawBall : function(ctx, pX, pY, size, numCol){
+    drawBall : function(ctx, pX, pY, size, numCol){
        size *= 10;
        ctx.fillStyle = this.gradientBall(ctx, pX, pY, size, numCol);
        ctx.beginPath();
@@ -43,8 +41,7 @@ TDraw = new Class({
        ctx.fill();
        },
 
-    drawSquare: function (ctx,pX,pY) {
-       let s = canvas.height/9;
+    drawSquare: function (ctx,pX,pY,s) {
        ctx.fillStyle = "Goldenrod";
        ctx.strokeStyle = "DarkGoldenrod";
        ctx.lineWidth = 3;
@@ -95,7 +92,7 @@ function firstSettings() {
         let item = new TDraw();
         item.drawBall(context, table[a[0]][a[1]].centX, table[a[0]][a[1]].centY, table[a[0]][a[1]].statSize,
             table[a[0]][a[1]].numCol);
-        createForecastballs(i,table[a[0]][a[1]].numCol);
+        createForecastBalls(i,table[a[0]][a[1]].numCol);
         i++;
     }
     score();
@@ -109,21 +106,17 @@ function drawCanvas(ctx) {
     for (let i = 0; i < canvas.width; i += canvas.width/9) {
         for (let j = 0; j < canvas.height; j += canvas.height/9){
             let item = new TDraw();
-            item.drawSquare(ctx,i,j);
+            item.drawSquare(ctx,i,j,canvas.width/9);
         }
     }
 }
 
 function selectElement(event) {
-    const ADD = -6;
-    console.log("start "+event.clientX+" "+ event.clientY);
+    console.log("mouse coordinates: "+event.clientX+" "+ event.clientY);
     for (let i = 0; i<table.length;i++){
         let f = false;
         for (let j = 0;j<table.length;j++){
-            if ((table[i][j].startX+(canvas.width/9) >= event.clientX+ADD)
-                && (table[i][j].startX <= (canvas.width/9)+event.clientX+ADD)
-                && (table[i][j].startY+(canvas.height/9) >= event.clientY + ADD)
-                && (table[i][j].startY <= (canvas.height/9)+event.clientY+ADD)){
+            if (checkClick(i,j,event.clientX,event.clientY)){
                 console.log("pos "+i+" "+j);
                 f = true;
                 if (!isChoose) {
@@ -140,15 +133,14 @@ function selectElement(event) {
                     } else if (table[i][j].statSize === 0){
                         console.log("choose place");
                         isChoose = false;
-                        if (checkRightLogicMove(currentX, currentY, i, j)) {
+                        if (checkLogicMove(currentX, currentY, i, j)) {
                             repositionElements(currentX, currentY, i, j);
                         } else
                             isChoose = true;
                     } else if (table[i][j].statSize === 1){
                         console.log("choose place with small ball");
                         isChoose = false;
-                        if (checkRightLogicMove(currentX, currentY, i, j)) {
-                            let c = table[i][j].numCol;
+                        if (checkLogicMove(currentX, currentY, i, j)) {
                             let a;
                             for(let z = 0; z<currentSmall.length;z++){
                                 console.log("count "+count);
@@ -191,6 +183,14 @@ function selectElement(event) {
             break;
         }
     }
+}
+
+function checkClick(x1,y1,clickX,clickY) {
+    const BORDER = -6;
+    return (table[x1][y1].startX + (canvas.width / 9) >= clickX + BORDER)
+        && (table[x1][y1].startX <= (canvas.width / 9) + clickX + BORDER)
+        && (table[x1][y1].startY + (canvas.height / 9) >= clickY + BORDER)
+        && (table[x1][y1].startY <= (canvas.height / 9) + clickY + BORDER);
 }
 
 function redrawCanvas() {
@@ -278,7 +278,7 @@ function createSmallBall(c) {
     for (let i = 0; i<c;i++) {
         currentSmall[i] = randomPosition(1);
         count++;
-        createForecastballs(i,table[currentSmall[i][0]][currentSmall[i][1]].numCol);
+        createForecastBalls(i,table[currentSmall[i][0]][currentSmall[i][1]].numCol);
     }
 }
 
@@ -323,12 +323,16 @@ function checkFullness(x) {
     return false;
 }
 
-function checkRightLogicMove(x1,y1,x2,y2) {
+function checkLogicMove(x1, y1, x2, y2) {
     let branch = [];
     let c = false;
     way = [];
     way.push([x1,y1]);
     while (true){
+        if (x1 === x2 && y1 === y2){
+            c = true;
+            break;
+        }
         //check branch, shock content
         if (
             (
@@ -354,11 +358,6 @@ function checkRightLogicMove(x1,y1,x2,y2) {
             )
         ){
             branch.push([x1,y1]);
-        }
-
-        if (x1 === x2 && y1 === y2){
-            c = true;
-            break;
         }
 
         if (x1 !== 8 && table[x1+1][y1].statSize !== 2 && table[x1+1][y1].statSize !== 3 &&
@@ -436,7 +435,7 @@ audio.src = 'Audio/fon_Music.mp3';
 audio.autoplay = true;
 audio.loop = true;
 function soundClick() {
-    console.log(audio.paused);
+    console.log("play music "+audio.paused);
     if (!audio.paused) {
         audio.pause()
     }
@@ -451,7 +450,6 @@ function getLines(x,y){
 
     let i = 1;
     while(l || r || u || d || lu || ru || ld || rd){
-        console.log(x+" " +y+" "+i);
         if(l && x-i>=0 && table[x][y].numCol===table[x-i][y].numCol && table[x][y].statSize===table[x-i][y].statSize){
             lines[1].push([x-i,y]);
         } else {
@@ -497,11 +495,8 @@ function getLines(x,y){
         }
 
         i++;
-        console.log(x+" " +y+" "+i+" "+2);
-
     }
     for(let i = lines.length-1; i>=1; i--){
-        console.log(lines[i]);
         if(lines[i].length < 5){
             lines.splice(i,1);
         }else{
@@ -522,7 +517,6 @@ function deleteLines(x,y) {
             if (a[i].length===7){currentScore+=11;}else
             if (a[i].length===8){currentScore+=14;}else
             if (a[i].length===9){currentScore+=15;}
-            console.log(currentScore);
             for (let j = 0; j<a[i].length;j++) {
                 if (a[i] !== undefined) {
                     console.log(a[i][j][0] + " " + a[i][j][0]);
@@ -533,7 +527,7 @@ function deleteLines(x,y) {
         }
     }
 }
-function createForecastballs(i,colour) {
+function createForecastBalls(i, colour) {
     let canvas2 = document.getElementById('canvas_for_small_ball');
     let context2 = canvas2.getContext('2d');
     let c=i;
@@ -548,21 +542,26 @@ function createForecastballs(i,colour) {
 }
 
 function score() {
-    if(currentScore > maxScore){maxScore = currentScore;}
+    if(currentScore > maxScore){
+        maxScore = currentScore;
+    }
     let s  = document.getElementById('score');
-    s.innerHTML = 'Score: '+currentScore +' <br></br>Record: '+ maxScore;
+    s.innerHTML = 'Score: '+currentScore +' <br><br>Record: '+ maxScore;
 }
 
 function endDialog() {
-    context.fillStyle = "Goldenrod";
-    context.strokeStyle = "DarkGoldenrod";
-    context.lineWidth = 3;
-    context.fillRect(0,0,canvas.width,canvas.height);
-    context.strokeRect(0,0,canvas.width,canvas.height);
-    context.fillStyle =  "black";
+    new TDraw().drawSquare(context,0,0,canvas.width);
     context.strokeStyle = "black";
-    context.font = "italic 30pt Arial";
-    context.fillText("Game", 100,100);
     context.font = 'bold 40pt sans-serif';
-    context.strokeText("Over", 200,200);
+    context.strokeText("Game Over", canvas.width/4,canvas.height/2.5);
+}
+
+function bumpColour(c) {
+    for (let i = 0;i<table.length;i++){
+        for (let j = 0;j<table.length;j++){
+            if (table[i][j].statSize === 2 && table[i][j].numCol === c){
+                table[i][j].statSize = 0;
+            }
+        } 
+    }
 }
