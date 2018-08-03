@@ -15,40 +15,38 @@
 </head>
 
 <body onload="firstSettings()">
-
+<div class="pole">
 <div id="container_with_game">
     <canvas id="canvas" onclick="selectElement(event)" width="600" height="600"></canvas>
 </div>
 
-<div class="page-center">
-    <p>Colour Lines</p>
-    <div class="description">
-        <p>The goal of the game is to collect as many lines of five or more balls of the same colour as possible.</p>
-    </div>
-</div>
-
 <div id="right-column">
-    <canvas id="canvas_for_small_ball" width="50" height="150"></canvas>
-
-    <div class="new-game">
-        <img src="new-game.png" width="100" height="100"
-             onclick="firstSettings()"
-             style="cursor: pointer;">
+    <div class="page-center">
+        <p>Colour Lines</p>
+        <div class="description">
+            <p>The goal of the game is to collect as many lines of five or more balls of the same colour as possible.</p>
+        </div>
     </div>
+    <div class="border">
+        <canvas id="canvas_for_small_ball" width="50" height="150"></canvas>
+            <div class="crutch">
+                <div class="new-game">
+                <img src="new-game.png" width="100" height="100"
+                onclick="firstSettings()"
+                style="cursor: pointer;">
+            </div>
 
-    <div class="play">
-        <img src="play.png" width="100" height="100"
+            <div class="play">
+            <img src="play.png" width="100" height="100"
              onclick="soundClick()"
              style="cursor: pointer;">
+            </div>
+            </div>
+        <div id="score"></div>
     </div>
-
-    <div id="score"></div>
 </div>
-
-
-
-
 <div id="container_with_state">
+</div>
 </div>
 </body>
 

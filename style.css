@@ -1,7 +1,15 @@
+.pole {
+    display: flex;
+    width: 90%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
 
-#container_with_game{
-    width: 611px;
-    height: 611px;
+#container_with_game {
+    display: flex;
+    width: 50%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
 }
 
 #container_with_state{
@@ -16,62 +24,63 @@
 }
 
 .page-center {
-    position: relative;
+    display: flex;
+    width: 100%;
     text-align: center;
-    width: 26%;
-    height: 150px;
-    left: 630px;
-    bottom: 615px;
-    box-sizing: content-box;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .description {
-    position: absolute;
     width: 100%;
-    height: 100px;
-    top: 50px;
+    height: 20%;
     font: 17pt/26pt Arial, Helvetica, sans-serif;
     color: #FFF;
 }
 
 #right-column {
-    position: relative;
-    text-align: center;
-    width: 26%;
-    height: 390px;
-    left: 630px;
-    bottom: 595px;
-    box-sizing: content-box;
+    display: flex;
+    width: 50%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.border {
+    display: flex;
+    width: 55%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.crutch {
+    width: 30%;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 #canvas_for_small_ball{
-    position: absolute;
-    left: 170px;
-    top: 90px;
+    height: min-content;
+
 }
 
 #score {
-    position: absolute;
-    left: 380px;
-    top: 110px;
-    text-align: left;
+    height: min-content;
 }
 
 .new-game {
-    position: absolute;
-    left: 250px;
-    top: 40px;
+    height: 165px;
 }
 
 .play {
-    position: absolute;
-    left: 250px;
-    top: 190px;
 }
 
 body
 {
-
     background: url(page-bgr.png) #454545;
     font: 24pt Arial, Helvetica, sans-serif;
     color: #FFF;
