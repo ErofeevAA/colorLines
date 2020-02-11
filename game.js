@@ -74,7 +74,7 @@ function firstSettings() {
     currentScore = 0;
     isChoose = false;
     currentSmall = new Array(3);
-    canvas = document.getElementById('canvas');
+    canvas = document.querySelector('.canvas');
     createCenterCoordinates();
     context = canvas.getContext('2d');
     drawCanvas(context);
@@ -528,7 +528,7 @@ function deleteLines(x,y) {
     }
 }
 function createForecastBalls(i, colour) {
-    let canvas2 = document.getElementById('canvas_for_small_ball');
+    let canvas2 = document.querySelector('.canvas_for_small_ball');
     let context2 = canvas2.getContext('2d');
     let c=i;
     let foreball = new TDraw();
@@ -545,7 +545,7 @@ function score() {
     if(currentScore > maxScore){
         maxScore = currentScore;
     }
-    let s  = document.getElementById('score');
+    let s  = document.querySelector('.score');
     s.innerHTML = 'Score: '+currentScore +' <br><br>Record: '+ maxScore;
 }
 
