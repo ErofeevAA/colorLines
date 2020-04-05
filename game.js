@@ -32,10 +32,6 @@ TDraw = new Class({
        size *= 10;
        ctx.fillStyle = this.gradientBall(ctx, pX, pY, size, numCol);
        ctx.beginPath();
-       ctx.shadowBlur = 1;
-       ctx.shadowOffsetX = -2.5;
-       ctx.shadowOffsetY = -1.5;
-       ctx.shadowColor = "gray";
        ctx.arc(pX,pY,size,0,2*Math.PI,false);
        ctx.closePath();
        ctx.fill();
@@ -201,7 +197,7 @@ function redrawCanvas() {
         createSmallBall(3);
     } else if (count < 81){
         fromSmallToBig(3);
-        createSmallBall(81-count);
+        createSmallBall(81 - count);
     } else {
         c = true;
     }
@@ -275,7 +271,7 @@ function stopMove() {
 }
 
 function createSmallBall(c) {
-    for (let i = 0; i<c;i++) {
+    for (let i = 0; i < c; i++) {
         currentSmall[i] = randomPosition(1);
         count++;
         createForecastBalls(i,table[currentSmall[i][0]][currentSmall[i][1]].numCol);
@@ -530,13 +526,13 @@ function deleteLines(x,y) {
 function createForecastBalls(i, colour) {
     let canvas2 = document.querySelector('.canvas_for_small_ball');
     let context2 = canvas2.getContext('2d');
-    let c=i;
+    let c = i;
     let foreball = new TDraw();
-    if (c===0){
+    if (c === 0){
         foreball.drawBall(context2, c+=25,c, 2, colour);
-    } else if(c===1){
+    } else if(c === 1) {
         foreball.drawBall(context2, c+=25,c+50, 2, colour);
-    } else if(c===2){
+    } else if(c === 2){
         foreball.drawBall(context2, c+=25,c+100, 2, colour);
     }
 }
